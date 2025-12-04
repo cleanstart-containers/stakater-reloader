@@ -1,8 +1,30 @@
 # 🔄 Stakater Reloader - CleanStart Container
 
+This project provides a CleanStart container image for **Stakater Reloader**, a Kubernetes controller that automatically reloads pods when ConfigMaps or Secrets change. Stakater Reloader watches for changes in ConfigMaps and Secrets that are referenced by Deployments, StatefulSets, or DaemonSets, and triggers rolling updates to restart pods with the updated configuration, eliminating the need for manual pod restarts. The CleanStart Stakater-Reloader image provides a production-ready, security-hardened container optimized for enterprise environments. Built on a minimal base OS with comprehensive security hardening, this image delivers reliable application execution with advanced security features.
+
+**📌 CleanStart Foundation:** Security-hardened, minimal base OS designed for enterprise containerized environments.
+
+**Image Path:** `cleanstart/stakater-reloader`
+
+**Registry:** CleanStart Registry
+
+---
+
 ## Overview
 
-This project provides a CleanStart container image for **Stakater Reloader**, a Kubernetes controller that automatically reloads pods when ConfigMaps or Secrets change. Stakater Reloader watches for changes in ConfigMaps and Secrets that are referenced by Deployments, StatefulSets, or DaemonSets, and triggers rolling updates to restart pods with the updated configuration, eliminating the need for manual pod restarts.
+Stakater Reloader is a Kubernetes controller that automatically reloads pods when ConfigMaps or Secrets change. It operates as a Kubernetes-native controller, continuously monitoring ConfigMaps and Secrets referenced by workloads and triggering rolling updates when changes are detected. This CleanStart Stakater-Reloader container is part of the CleanStart application suite, featuring enterprise-grade security hardening, automated vulnerability management, and compliance with industry standards.
+
+---
+
+## About CleanStart
+
+CleanStart is a comprehensive container registry providing security-hardened, enterprise-ready container images. Our images are designed with security-first principles, featuring minimal attack surfaces, regular security updates, and compliance with industry standards.
+
+### About CleanStart Images
+
+CleanStart images are built on secure, minimal base operating systems and optimized for production environments. Each image undergoes rigorous security testing, vulnerability scanning, and compliance validation to ensure enterprise-grade security and reliability.
+
+---
 
 ## Project Structure
 
@@ -11,41 +33,30 @@ The Stakater Reloader container project is organized into the following structur
 - **Root Directory**: Contains the main project README and container build configuration
 - **`kubernetes/`**: Complete Kubernetes deployment manifests and documentation for testing the Stakater Reloader container in a Kubernetes environment, including a test web application that demonstrates the reloader functionality
 
+---
+
 ## Container Image
 
 **Image:** `cleanstart/stakater-reloader:latest-dev`
 
 The container image includes:
+
 - Stakater Reloader binary located at `/usr/bin/Reloader`
 - Non-root user execution (`clnstrt` user)
 - Pre-configured SSL certificates at `/etc/ssl/certs/ca-certificates.crt`
 - Linux/amd64 architecture support
 - Security-hardened configuration with minimal privileges
 
-## Kubernetes Deployment
+---
 
-The `kubernetes/` directory contains a complete deployment setup for testing the Stakater Reloader container functionality in Kubernetes clusters, including a test web application that demonstrates automatic pod reloading when ConfigMaps or Secrets change.
+## Key Features
 
-### Deployment Components
-
-The Kubernetes deployment includes:
-
-- **Stakater Reloader Controller** (in `reloader-test` namespace):
-  - Namespace: `reloader-test`
-  - ServiceAccount: `reloader` with appropriate RBAC permissions
-  - ClusterRole & ClusterRoleBinding: Permissions for watching ConfigMaps, Secrets, and updating Deployments, StatefulSets, and DaemonSets
-  - Deployment: Single-replica deployment running the Reloader controller
-  - Leader Election: Enabled for high availability
-
-- **Test Web Application** (in `reloader-test` namespace):
-  - Deployment: Python-based web server that displays configuration values from ConfigMaps and Secrets
-  - Service: ClusterIP service exposing port 80 (targeting port 8000)
-  - ConfigMap: Contains application configuration (APP_TITLE, APP_COLOR, SITE_NAME)
-  - Secret: Contains sensitive configuration (APP_NAME, ENV, VERSION, MESSAGE)
-  - Annotations: Configured with `reloader.stakater.com/auto: "true"` to enable automatic reloading
-
-### Key Features
-
+- **Security-First Design**: Built with minimal attack surfaces and security hardening
+- **Enterprise Compliance**: Meets industry standards including FIPS, STIG, and CIS benchmarks
+- **Regular Updates**: Automated security patches and vulnerability management
+- **Multi-Architecture Support**: Available for AMD64 and ARM64 architectures
+- **Production Ready**: Optimized for enterprise deployment and scaling
+- **Comprehensive Documentation**: Detailed guides and best practices for each image
 - **Automatic Pod Reloading**: Automatically triggers rolling updates when ConfigMaps or Secrets change
 - **Annotation-Based**: Uses Kubernetes annotations to identify which deployments should be reloaded
 - **Multi-Namespace Support**: Watches all namespaces by default (configurable)
@@ -55,16 +66,24 @@ The Kubernetes deployment includes:
 - **Resource Management**: Configured with CPU and memory requests/limits
 - **Leader Election**: Enabled to prevent multiple controller instances from running simultaneously
 
-### Current Configuration
+---
 
-The deployment is configured for **testing and validation purposes**. The reloader controller runs with:
+## Use Cases
 
-- Default configuration (watches all namespaces)
-- Annotation-based reload strategy
-- Automatic detection of ConfigMaps and Secrets referenced by deployments
-- Test web application that demonstrates the reloader functionality
+Typical scenarios where this container excels:
 
-### How It Works
+- **Image Validation**: Testing the CleanStart Stakater Reloader container image
+- **Development Testing**: Validating Reloader functionality in Kubernetes environments
+- **Configuration Management**: Demonstrating automatic pod reloading when configuration changes
+- **CI/CD Integration**: Automated testing of the container image and reloader functionality
+- **Learning & Training**: Understanding how automatic configuration reloading works in Kubernetes
+- Zero downtime configuration updates
+- Automated application restarts on config changes
+- Production configuration management
+
+---
+
+## How It Works
 
 1. **Configuration Monitoring**: The Reloader controller watches all ConfigMaps and Secrets in the cluster (or specific namespaces if configured)
 
@@ -76,7 +95,9 @@ The deployment is configured for **testing and validation purposes**. The reload
 
 5. **Annotation Configuration**: Deployments with the annotation `reloader.stakater.com/auto: "true"` automatically reload when any referenced ConfigMap or Secret changes
 
-### Prerequisites
+---
+
+## Prerequisites
 
 Before deploying, ensure you have:
 
@@ -84,17 +105,70 @@ Before deploying, ensure you have:
 2. **kubectl**: Installed and configured to connect to your cluster
 3. **Image Access**: Ability to pull `cleanstart/stakater-reloader:latest-dev` and `python:3.11-alpine` images
 
-### Use Cases
+---
 
-This deployment is designed for:
+## Quick Start
 
-- **Image Validation**: Testing the CleanStart Stakater Reloader container image
-- **Development Testing**: Validating Reloader functionality in Kubernetes environments
-- **Configuration Management**: Demonstrating automatic pod reloading when configuration changes
-- **CI/CD Integration**: Automated testing of the container image and reloader functionality
-- **Learning & Training**: Understanding how automatic configuration reloading works in Kubernetes
+### Pull Commands
+```bash
+docker pull cleanstart/stakater-reloader:latest
+docker pull cleanstart/stakater-reloader:latest-dev
+```
 
-### Test Application
+### Run Commands
+
+Basic test:
+```bash
+docker run -it --name stakater-reloader-test cleanstart/stakater-reloader:latest-dev
+```
+
+Production deployment:
+```bash
+docker run -d --name stakater-reloader-prod \
+  --read-only \
+  --security-opt=no-new-privileges \
+  --user 1000:1000 \
+  cleanstart/stakater-reloader:latest
+```
+
+---
+
+## Kubernetes Deployment
+
+The `kubernetes/` directory contains a complete deployment setup for testing the Stakater Reloader container functionality in Kubernetes clusters, including a test web application that demonstrates automatic pod reloading when ConfigMaps or Secrets change.
+
+### Deployment Components
+
+The Kubernetes deployment includes:
+
+**Stakater Reloader Controller** (in `reloader-test` namespace):
+- Namespace: `reloader-test`
+- ServiceAccount: `reloader` with appropriate RBAC permissions
+- ClusterRole & ClusterRoleBinding: Permissions for watching ConfigMaps, Secrets, and updating Deployments, StatefulSets, and DaemonSets
+- Deployment: Single-replica deployment running the Reloader controller
+- Leader Election: Enabled for high availability
+
+**Test Web Application** (in `reloader-test` namespace):
+- Deployment: Python-based web server that displays configuration values from ConfigMaps and Secrets
+- Service: ClusterIP service exposing port 80 (targeting port 8000)
+- ConfigMap: Contains application configuration (APP_TITLE, APP_COLOR, SITE_NAME)
+- Secret: Contains sensitive configuration (APP_NAME, ENV, VERSION, MESSAGE)
+- Annotations: Configured with `reloader.stakater.com/auto: "true"` to enable automatic reloading
+
+### Current Configuration
+
+The deployment is configured for **testing and validation purposes**. The reloader controller runs with:
+
+- Default configuration (watches all namespaces)
+- Annotation-based reload strategy
+- Automatic detection of ConfigMaps and Secrets referenced by deployments
+- Test web application that demonstrates the reloader functionality
+
+For detailed deployment instructions, testing procedures, and configuration options, refer to the `kubernetes/README.md` file in the `kubernetes/` directory.
+
+---
+
+## Test Application
 
 The deployment includes a test web application that:
 
@@ -103,13 +177,32 @@ The deployment includes a test web application that:
 - Demonstrates the reloader functionality by automatically restarting when configuration changes
 - Provides a visual interface for testing configuration updates
 
-### Benefits
+---
+
+## Benefits
 
 - **Zero Downtime Updates**: Rolling updates ensure applications remain available during configuration changes
 - **Automated Management**: No manual intervention required to restart pods after configuration changes
 - **Configuration Consistency**: Ensures all pods use the latest configuration without manual restarts
 - **DevOps Friendly**: Simplifies configuration management and reduces operational overhead
 - **Production Ready**: Suitable for production environments with proper RBAC and resource limits
+
+---
+
+## Architecture Support
+
+CleanStart images support multiple architectures to ensure compatibility across different deployment environments:
+
+- **AMD64**: Intel and AMD x86-64 processors
+- **ARM64**: ARM-based processors including Apple Silicon and ARM servers
+
+### Architecture-based Pull Commands
+```bash
+docker pull --platform linux/amd64 cleanstart/stakater-reloader:latest
+docker pull --platform linux/arm64 cleanstart/stakater-reloader:latest
+```
+
+---
 
 ## Notes
 
@@ -122,5 +215,22 @@ The current Kubernetes deployment runs Stakater Reloader with default configurat
 - Implement proper logging and observability for configuration changes
 - Consider using reloader with GitOps tools for configuration management
 
-For detailed deployment instructions, testing procedures, and configuration options, refer to the `kubernetes/README.md` file in the `kubernetes/` directory.
+---
 
+## Resources
+
+- **Official Documentation:** https://github.com/stakater/Reloader
+- **Stakater GitHub Repository:** https://github.com/stakater/Reloader
+- **Provenance / SBOM / Signature:** https://images.cleanstart.com/images/stakater-reloader
+- **Docker Hub:** https://hub.docker.com/r/cleanstart/stakater-reloader
+- **CleanStart All Images:** https://images.cleanstart.com
+- **CleanStart Community Images:** https://hub.docker.com/u/cleanstart
+---
+
+## Vulnerability Disclaimer
+
+CleanStart offers Docker images that include third-party open-source libraries and packages maintained by independent contributors. While CleanStart maintains these images and applies industry-standard security practices, it cannot guarantee the security or integrity of upstream components beyond its control.
+
+Users acknowledge and agree that open-source software may contain undiscovered vulnerabilities or introduce new risks through updates. CleanStart shall not be liable for security issues originating from third-party libraries, including but not limited to zero-day exploits, supply chain attacks, or contributor-introduced risks.
+
+**Security remains a shared responsibility:** CleanStart provides updated images and guidance where possible, while users are responsible for evaluating deployments and implementing appropriate controls.
