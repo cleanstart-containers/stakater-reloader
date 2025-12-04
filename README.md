@@ -4,7 +4,7 @@ This project provides a CleanStart container image for **Stakater Reloader**, a 
 
 **📌 CleanStart Foundation:** Security-hardened, minimal base OS designed for enterprise containerized environments.
 
-**Image Path:** `cleanstart/stakater-reloader`
+**Image Path:** `ghcr.io/cleanstart-containers/stakater-reloader`
 
 **Registry:** CleanStart Registry
 
@@ -37,7 +37,7 @@ The Stakater Reloader container project is organized into the following structur
 
 ## Container Image
 
-**Image:** `cleanstart/stakater-reloader:latest-dev`
+**Image:** `ghcr.io/cleanstart-containers/stakater-reloader:latest-dev`
 
 The container image includes:
 
@@ -103,7 +103,7 @@ Before deploying, ensure you have:
 
 1. **Kubernetes Cluster**: Any Kubernetes cluster (Kind, minikube, k3s, GKE, EKS, AKS, etc.)
 2. **kubectl**: Installed and configured to connect to your cluster
-3. **Image Access**: Ability to pull `cleanstart/stakater-reloader:latest-dev` and `python:3.11-alpine` images
+3. **Image Access**: Ability to pull `ghcr.io/cleanstart-containers/stakater-reloader:latest-dev` and `python:3.11-alpine` images
 
 ---
 
@@ -111,15 +111,15 @@ Before deploying, ensure you have:
 
 ### Pull Commands
 ```bash
-docker pull cleanstart/stakater-reloader:latest
-docker pull cleanstart/stakater-reloader:latest-dev
+docker pull ghcr.io/cleanstart-containers/stakater-reloader:latest
+docker pull ghcr.io/cleanstart-containers/stakater-reloader:latest-dev
 ```
 
 ### Run Commands
 
 Basic test:
 ```bash
-docker run -it --name stakater-reloader-test cleanstart/stakater-reloader:latest-dev
+docker run -it --name stakater-reloader-test ghcr.io/cleanstart-containers/stakater-reloader:latest-dev
 ```
 
 Production deployment:
@@ -128,7 +128,7 @@ docker run -d --name stakater-reloader-prod \
   --read-only \
   --security-opt=no-new-privileges \
   --user 1000:1000 \
-  cleanstart/stakater-reloader:latest
+  ghcr.io/cleanstart-containers/stakater-reloader:latest
 ```
 
 ---
@@ -198,8 +198,8 @@ CleanStart images support multiple architectures to ensure compatibility across 
 
 ### Architecture-based Pull Commands
 ```bash
-docker pull --platform linux/amd64 cleanstart/stakater-reloader:latest
-docker pull --platform linux/arm64 cleanstart/stakater-reloader:latest
+docker pull --platform linux/amd64 ghcr.io/cleanstart-containers/stakater-reloader:latest
+docker pull --platform linux/arm64 ghcr.io/cleanstart-containers/stakater-reloader:latest
 ```
 
 ---
